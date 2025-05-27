@@ -40,6 +40,7 @@ public class Snake extends JFrame implements KeyListener
             System.out.println("go up");
         break;
         case
+            sout
         if (e.getKeyCode() == 38 || e.getKeyCode() == 87)
         {
             System.out.println("go up");
