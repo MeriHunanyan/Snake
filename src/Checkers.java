@@ -13,7 +13,7 @@ public class Checkers
         square(boolean color)
         {
             this.color = color;
-            JPanel small = new JPanel()
+            JButton small = new JButton()
             {
                 @Override
                 public void paintComponent(Graphics g)
@@ -23,11 +23,11 @@ public class Checkers
                     {
                         if(color == true)
                         {
-                            square = new ImageIcon(getClass().getResource("/black.png")).getImage();
+                            square = new ImageIcon(getClass().getResource("/black.png")).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
                             g.drawImage(square, 20, 20, 100, 100, null);
                         } else
                         {
-                            square = new ImageIcon(getClass().getResource("/untitled.png")).getImage();
+                            square = new ImageIcon(getClass().getResource("/untitled.png")).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
                             g.drawImage(square, 20, 20, 100, 100, null);
                         }
 
@@ -45,7 +45,7 @@ public class Checkers
             this.color = color;
             this.piece = piece;
             System.out.println("constructor");
-            JPanel small = new JPanel() {
+            JButton small = new JButton() {
                 @Override
                 public void paintComponent(Graphics g) {
                     System.out.println("inside");
@@ -53,11 +53,11 @@ public class Checkers
                         Image square;
                         if (color) {
                             System.out.println("hello");
-                            square = new ImageIcon(getClass().getResource("/blackpiece.png")).getImage();
+                            square = new ImageIcon(getClass().getResource("/blackpiece.png")).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
                             g.drawImage(square, 20, 20, 100, 100, null);
                         } else {
                             //System.out.println("hello");
-                            square = new ImageIcon(getClass().getResource("/whitepiece.png")).getImage();
+                            square = new ImageIcon(getClass().getResource("/whitepiece.png")).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
                             g.drawImage(square, 20, 20, 100, 100, null);
                         }
 
@@ -86,7 +86,7 @@ public class Checkers
     //board
     Object[][] board = new Object[8][8];
     //visual board
-    JPanel chessboard = new JPanel();
+    JPanel chessboard = new JPanel(new GridLayout(8, 8, 0, 0));
 
     //Game play
     boolean userTurn = true;
