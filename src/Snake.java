@@ -1,8 +1,8 @@
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.sql.SQLOutput;
 import javax.swing.*;
-
 public class Snake extends JFrame implements KeyListener
 {
     int cur_score = 0;
@@ -35,10 +35,17 @@ public class Snake extends JFrame implements KeyListener
     @Override
     public void keyTyped(KeyEvent e) {
         switch (e.getKeyCode()){
-        case 38:
-        case 87:
+        case 38: // up
+        case 87: // w
             System.out.println("go up");
         break;
+        case 68: // d
+        case 39: // arrow right key
+            System.out.println("go right");
+            break;
+        case 65: // a
+        case 37:
+            System.out.println("go left");// left arrow
         case
             sout
         if (e.getKeyCode() == 38 || e.getKeyCode() == 87)
