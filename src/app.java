@@ -2,6 +2,6 @@ public class app
 {
     public static void main(String[] args)throws Exception
     {
-        Checkers game = new Checkers();
+        checkers2 game = new checkers2();
     }
 }

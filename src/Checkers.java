@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.awt.event.*;
-
+import java.awt.Graphics;
 
 public class Checkers
 {
@@ -13,21 +13,24 @@ public class Checkers
         square(boolean color)
         {
             this.color = color;
-            JButton small = new JButton()
-            {
+            System.out.println("inside constr");
+            JButton small = new JButton() {
                 @Override
-                public void paintComponent(Graphics g)
-                {
+                protected void paintComponent(Graphics g) {
+                    super.paintComponent(g);
+                    System.out.println("inside");
                     Image square;
                     try
                     {
                         if(color == true)
                         {
+                            System.out.println("black");
                             square = new ImageIcon(getClass().getResource("/black.png")).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
                             g.drawImage(square, 20, 20, 100, 100, null);
                         } else
                         {
-                            square = new ImageIcon(getClass().getResource("/untitled.png")).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+                            System.out.println("white");
+                            square = new ImageIcon(getClass().getResource("/Untitled.png")).getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
                             g.drawImage(square, 20, 20, 100, 100, null);
                         }
 
@@ -38,24 +41,32 @@ public class Checkers
 
                 }
             };
+            small.setContentAreaFilled(false);
+            small.setFocusPainted(false);
+            small.setBorderPainted(false);
+            small.setOpaque(false);
             chessboard.add(small);
         }
         square(boolean color, gamepiece piece)
         {
             this.color = color;
             this.piece = piece;
-            System.out.println("constructor");
+            //System.out.println("constructor");
             JButton small = new JButton() {
                 @Override
-                public void paintComponent(Graphics g) {
+                protected void paintComponent(Graphics g) {
+                    super.paintComponent(g);
                     System.out.println("inside");
                     try {
                         Image square;
+                        System.out.println(color);
                         if (color) {
-                            System.out.println("hello");
+                            System.out.println("blackpiece");
                             square = new ImageIcon(getClass().getResource("/blackpiece.png")).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+                            //this.setBackground(Color.BLUE);
                             g.drawImage(square, 20, 20, 100, 100, null);
                         } else {
+                            System.out.println("whitepiece");
                             //System.out.println("hello");
                             square = new ImageIcon(getClass().getResource("/whitepiece.png")).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
                             g.drawImage(square, 20, 20, 100, 100, null);
@@ -66,6 +77,7 @@ public class Checkers
                     }
                 }
             };
+            chessboard.add(small);
         }
     }
     private class gamepiece
@@ -100,17 +112,15 @@ public class Checkers
     JPanel panel = new JPanel();
     Checkers()                                                      //constructor
     {
-        chessboard.setSize(400, 400);
-        chessboard.setLayout(new GridLayout(8, 8));
-        chessboard.setVisible(true);
-        startGame();
-        chessboard.repaint();
+
         frame.setVisible(true);
         frame.setSize(width, length);
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+        chessboard.setSize(400, 400);
+        chessboard.setLayout(new GridLayout(8, 8));
+        startGame();
         panel.setLayout(new BorderLayout());
         panel.setBackground(new Color(160, 160, 160));
         frame.add(panel);
@@ -135,19 +145,18 @@ public class Checkers
                 {
                     if(0<j && j<3)
                     {
-                        //System.out.println("hello");
+                        System.out.println("hello");
                         board[i][j] = new square(true, new gamepiece(true, false)); //black pieces
-                        chessboard.setVisible(true);
+                        continue;
                     } else if(4<j)
                     {
                         board[i][j] = new square(true, new gamepiece(false, false)); //white pieces
-                        chessboard.setVisible(true);
+                        continue;
                     }
                     board[i][j] = new square(true);
-                    chessboard.setVisible(true);
+                    continue;
                 }
                 board[i][j] =new square(false);
-                chessboard.setVisible(true);
             }
         }
         chessboard.setVisible(true);
