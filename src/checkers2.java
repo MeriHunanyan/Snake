@@ -29,7 +29,7 @@ public class checkers2
     public class square
     {
         int bloffpos;
-        int[] loc = new int[2];
+        int[] loc;
         int i;
         int j;
         private String imgpath;
@@ -37,7 +37,7 @@ public class checkers2
         square(int i, int j, String imgpath)
         {
             this.imgpath = imgpath;
-            int[] pos = {i, j};
+            int[] pos = {j, i};
             this.loc = pos;
             button = new JButton()
             {
@@ -68,7 +68,7 @@ public class checkers2
         {
             this.bloffpos = val;
             this.imgpath = imgpath;
-            int[] pos = {i, j};
+            int[] pos = {j, i};
             this.loc = pos;
             button = new JButton()
             {
@@ -97,7 +97,7 @@ public class checkers2
         }
         public int[] getloc()
         {
-            return loc;
+            return loc.clone();
         }
         public JButton getButton()
         {
@@ -113,7 +113,7 @@ public class checkers2
         }
         public void changeloc(int[] newloc)
         {
-            this.loc = newloc;
+            this.loc = newloc.clone();
         }
         public void changeimg(String newimg)
         {
@@ -175,7 +175,7 @@ public class checkers2
             GenerateContentResponse response =
                     client.models.generateContent(
                             "gemini-2.0-flash",
-                            "I am playing checkers and I am playing the white pieces. What would be a good move if the white pieces are in positions" + whitelocs + " and black pieces are in positions " + blacklocs + ". please use standard notation and respond in this exact format: 'position of the piece to be moved':'the position of the piece after we moved it'",
+                            "I am playing checkers and I am playing the white pieces. What would be a good move if the white pieces are in positions" + whitelocs + " and black pieces are in positions " + blacklocs + ". please use standard notation and respond in this exact format: position of the piece to be moved:the position of the piece after we moved it. Please don't include anything else in your response. Have the rules of checkers in mind.",
                             null);
             System.out.println(response.text());
             String sresponse = response.text();
@@ -210,7 +210,7 @@ public class checkers2
             }
             System.out.println(Arrays.toString(curpos));
             System.out.println(Arrays.toString(potpos));
-            checkeat(potpos, curpos);
+            //checkeat(potpos, curpos);
             switchpiece(potpos, curpos);
         } catch (Exception e)
         {
@@ -227,7 +227,7 @@ public class checkers2
         {
             System.out.println(e);
         }
-        int[] curpos = nowcur;
+        int[] curpos = nowcur.clone();
         latch = new CountDownLatch(1);
         try {
             latch.await();
@@ -235,9 +235,13 @@ public class checkers2
         {
             System.out.println(e);
         }
-        int[] potpos = nowcur;
+        int[] potpos = nowcur.clone();
+        int[] apotpos = potpos.clone();
+        int[] acurpos = curpos.clone();
+        System.out.println("running checkeat");
         checkeat(potpos, curpos);
-        switchpiece(potpos, curpos);
+        System.out.println("running switchpiece");
+        switchpiece(apotpos, acurpos);
     }
     public void checkeat(int[] potpos,int[] curpos)
     {
@@ -247,50 +251,52 @@ public class checkers2
         int y1 = potpos[1];
         System.out.println("Pos " + x0 + " " + y0 + " " + x1 + " " + y1);
 
-        if(curpos[0]+2 == potpos[0] && curpos[1]-2 == potpos[1])
+        if(curpos[1]+2 == potpos[1] && curpos[0]-2 == potpos[0])
         {
-            board[curpos[0]+1][curpos[1]-1].changeimg((turn.equals("black")) ? "/black.png" : "/Untitled.png");
-            board[curpos[0]+1][curpos[1]-1].getButton().repaint();
+            board[curpos[1]-1][curpos[0]+1].changeimg("/black.png");
+            board[curpos[1]-1][curpos[0]+1].getButton().repaint();
             System.out.println("inside1");
             chessboard.repaint();
-        } else if(curpos[0]+2 == potpos[0] && curpos[1] +2 == potpos[1])
+        } else if(curpos[1]+2 == potpos[1] && curpos[0] +2 == potpos[0])
         {
-            board[curpos[0]+1][curpos[1]+1].changeimg((turn.equals("black")) ? "/black.png" : "/Untitled.png");
-            board[curpos[0]+1][curpos[1]+1].getButton().repaint();
+            board[curpos[1]+1][curpos[0]+1].changeimg("/black.png");
+            board[curpos[1]+1][curpos[0]+1].getButton().repaint();
             System.out.println("inside2");
             chessboard.repaint();
-        }else if(curpos[0]-2 == potpos[0] && curpos[1]+2 == potpos[1])
+        }else if(curpos[1]-2 == potpos[1] && curpos[0]+2 == potpos[0])
         {
-            board[curpos[0]-1][curpos[1]+1].changeimg((turn.equals("black")) ? "/black.png" : "/Untitled.png");
-            board[curpos[0]-1][curpos[1]+1].getButton().repaint();
+            board[curpos[1]+1][curpos[0]-1].changeimg("/black.png");
+            board[curpos[1]+1][curpos[0]-1].getButton().repaint();
             System.out.println("inside3");
             chessboard.repaint();
-        }else if(curpos[0]-2 == potpos[0] && curpos[1]-2 == potpos[1])
+        }else if(curpos[1]-2 == potpos[1] && curpos[0]-2 == potpos[0])
         {
-            board[curpos[0]-1][curpos[1]-1].changeimg((turn.equals("black")) ? "/black.png" : "/Untitled.png");
-            board[curpos[0]-1][curpos[1]-1].getButton().repaint();
+            board[curpos[1]-1][curpos[0]-1].changeimg("/black.png");
+            board[curpos[1]-1][curpos[0]-1].getButton().repaint();
             System.out.println("inside4");
             chessboard.repaint();
         }
     }
     public void switchpiece(int[] potpos, int[] curpos)
     {
+
         square toswitch;
         square toswitchw;
-        toswitch = board[potpos[0]][potpos[1]];
-        toswitchw = board[curpos[0]][curpos[1]];
+        toswitch = board[curpos[1]][curpos[0]];
+        toswitchw = board[potpos[1]][potpos[0]];
+        //switch img
         String tempImg = toswitch.getImgpath();
         String tempImg2 = toswitchw.getImgpath();
         toswitch.changeimg(tempImg2);
         toswitchw.changeimg(tempImg);
-        toswitchw.changeloc(toswitch.getloc());
-        toswitch.changeloc(toswitchw.getloc());
-        board[potpos[0]][potpos[1]] = toswitchw;
-        board[curpos[0]][curpos[1]] = toswitch;
-        System.out.println("repain");
-        board[potpos[0]][potpos[1]].getButton().repaint();
-        board[curpos[0]][curpos[1]].getButton().repaint();
+        //switch locs
+        int[] toswitchwloc = toswitchw.getloc().clone();
+        toswitchw.changeloc(toswitch.getloc().clone());
+        toswitch.changeloc(toswitchwloc);
+        board[potpos[1]][potpos[0]].getButton().repaint();
+        board[curpos[1]][curpos[0]].getButton().repaint();
         chessboard.repaint(); // whole board
+
     }
 
     public void build_board()
@@ -324,8 +330,6 @@ public class checkers2
                 }
                 board[i][j] = new square(i, j, "/Untitled.png");
             }
-
-            System.out.println();
         }
     }
 }
