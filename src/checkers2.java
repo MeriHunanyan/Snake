@@ -34,6 +34,7 @@ public class checkers2
         int j;
         private String imgpath;
         JButton button;
+        int[] pos;
         square(int i, int j, String imgpath)
         {
             this.imgpath = imgpath;
@@ -68,7 +69,7 @@ public class checkers2
         {
             this.bloffpos = val;
             this.imgpath = imgpath;
-            int[] pos = {j, i};
+            this.pos = new int[] {j,i};
             this.loc = pos;
             button = new JButton()
             {
@@ -113,7 +114,9 @@ public class checkers2
         }
         public void changeloc(int[] newloc)
         {
-            this.loc = newloc.clone();
+            pos[0] = newloc[0];
+            pos[1] = newloc[1];
+            square.this.loc = newloc.clone();
         }
         public void changeimg(String newimg)
         {
